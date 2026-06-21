@@ -6,74 +6,72 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # nextjs-wanderlust-explorer
 
-Fresh `create-next-app` scaffold — no custom code, no tests, no CI.
+Fresh `create-next-app` scaffold. Treat this repo as an initial baseline.
+
+## Source of Truth
+
+- Commands and runtime behavior: `package.json`
+- AI agent instructions: `AGENTS.md`
+- `README.md` may lag behind implementation details
 
 ## Commands
 
-```bash
-npm run dev      # dev server (Turbopack by default in v16)
-npm run build    # production build (Turbopack by default)
-npm run lint     # ESLint flat config
-```
+- `npm run dev` starts local development server
+- `npm run lint` runs ESLint flat config checks
+- `npm run build` validates production build
+- `npm run start` runs production server
+- There are no automated tests yet
 
-## Structure
+## Current Repository State
 
-```
-src/        → app/  (App Router, layout.tsx + page.tsx)
-@/*         → ./src/*  (tsconfig path alias)
-```
+- Existing app routes: only `/` (`src/app/page.tsx`)
+- Existing app files in App Router: `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`
+- Do not assume domain components, data layer, or extra routes already exist
 
-## Stack
+## Target Product Requirements (Not Yet Implemented)
 
-- **Next.js 16** — `params`/`searchParams` are Promises; `middleware` renamed to `proxy`; `revalidateTag` requires 2nd arg `cacheLife`; `cacheLife`/`cacheTag` stable (no `unstable_`)
-- **Tailwind v4** with `@tailwindcss/postcss`
-- **ESLint** flat config (`eslint.config.mjs`)
+- Build the following routes when requested:
+1. `/` home hero with CTA to `/experiences`
+2. `/experiences` list with search + category + destination filters
+3. `/experiences/[id]` experience detail by local dataset id
+4. `/favourites` list from local component state
+5. `/profile` static profile with saved favourites summary
 
+## Technical Constraints
 
-**Product Requirements**
+- Stack:
+  - Next.js 16
+  - Tailwind v4 with `@tailwindcss/postcss`
+  - ESLint flat config (`eslint.config.mjs`)
+- Reusable components expected when implementing product features:
+  - Experience card
+  - Search bar
+  - Filters (category and destination)
+- Dataset requirement:
+  - Local TypeScript dataset with 100 experiences
+  - Required fields: `id`, `title`, `description`, `category`, `destination`, `price`, `rating`, `imageUrl`
+  - Allowed categories: `Adventure`, `Culture`, `Food`, `Wellness`, `Nature`
 
-1. **Home Page**
-	* Display a hero section with a button that navigates to the `/experiences` page
-2. **Experiences Page (/experiences)**
-	* Display a list of cards representing experiences, including:
-		+ Search bar that filters experiences by title (case-insensitive regex)
-		+ At least two filters: category and destination
-		+ Reflect search term and active filters in the URL as query parameters
-	* Pre-populate input fields with search term and filter values when the page loads
-3. **Experience Detail Page (/experiences/[id])**
-	* Display full information about an experience, retrieved from the local dataset by its ID
-4. **Favourites Page (/favourites)**
-	* Display a list of experiences that the user has marked as favourites (stored in component state for now)
-5. **Profile Page (/profile)**
-	* Display a static page with a simulated user profile and a summary showing the number of saved favourites
+## Next.js 16 Guardrails
 
-**Technical Requirements**
+- `params` and `searchParams` are Promises in route handlers/pages where applicable
+- `middleware` has been renamed to `proxy`
+- `revalidateTag` requires second argument `cacheLife`
+- Use stable `cacheLife` and `cacheTag` APIs (not `unstable_*`)
+- Before using any API pattern you are unsure about, check docs in `node_modules/next/dist/docs/`
 
-1. **Technology Stack**
-	- **Next.js 16** — `params`/`searchParams` are Promises; `middleware` renamed to `proxy`; `revalidateTag` requires 2nd arg `cacheLife`; `cacheLife`/`cacheTag` stable (no `unstable_`)
-  - **Tailwind v4** with `@tailwindcss/postcss`
-  - **ESLint** flat config (`eslint.config.mjs`)
-2. **Component Inventory**
-	* Develop reusable components for:
-		+ Experience cards
-		+ Search bar
-		+ Filters (category and destination)
-3. **Dataset Generation**
-	* Generate an array of 100 experience objects using an AI code assistant, with at least the following properties:
-		+ id
-		+ title
-		+ description
-		+ category (one of: Adventure, Culture, Food, Wellness, Nature)
-		+ destination (city + country)
-		+ price
-		+ rating
-		+ imageUrl (any placeholder)
-	* Save the dataset as a local TypeScript file
+## Implementation Rules for Agents
 
-**Acceptance Criteria**
+- Reflect search term and active filters in URL query parameters
+- Pre-populate UI inputs from current query parameters
+- Search must use case-insensitive regex against experience title
+- Category and destination filters must be independent and composable
+- Keep favourites local in component state for now
+- Prefer creating missing architecture explicitly instead of assuming files already exist
 
-1. The search bar filters experiences by title using a case-insensitive regex.
-2. The category and destination filters work independently and can be combined with the search.
-3. The search term and active filters are reflected in the URL as query parameters.
-4. The input fields are pre-populated with search term and filter values when the page loads.
-5. The application persists data locally, storing favourites in component state for now.
+## Validation Checklist
+
+Run before finalizing feature work:
+1. `npm run lint`
+2. `npm run build`
+3. Manual spot check in `npm run dev` for affected routes
