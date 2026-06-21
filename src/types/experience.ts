@@ -5,6 +5,15 @@ export type ExperienceCategory =
   | "Wellness"
   | "Nature";
 
+
+export enum ExperienceCategoryEnum {
+  Culture,
+  Adventure,
+  Wellness,
+  Food,
+  Nature,
+}
+
 export interface Experience {
   id: string;
   title: string;
