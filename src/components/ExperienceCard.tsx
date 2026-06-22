@@ -32,7 +32,7 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
       <div className="relative border-b-2 border-[#121212] bg-[#bdd8df] px-4 py-2">
         <button
           onClick={() => (liked ? removeFavourite(experience.id) : addFavourite(experience.id))}
-          className="absolute left-2 top-1/2 -translate-y-1/2"
+          className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer rounded-full p-1 text-[#1a1816]"
           aria-label={liked ? "Remove from favourites" : "Add to favourites"}
         >
           <svg
@@ -66,7 +66,7 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
       </div>
 
       <div className="grid grid-cols-[88px_1fr] gap-3 px-4 py-4">
-        <div className="relative h-[88px] w-[88px] overflow-hidden rounded-full border-2 border-[#121212]">
+        <div className="relative h-22 w-22 overflow-hidden rounded-full border-2 border-[#121212]">
           <Image
             src={experience.imageUrl}
             alt={experience.title}
