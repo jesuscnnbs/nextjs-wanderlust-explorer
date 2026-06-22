@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import TopBar from "@/components/TopBar";
+import FavouriteButton from "@/components/FavouriteButton";
 import { experienceDataset } from "@/types/dataset";
 
 type ExperienceDetailPageProps = {
@@ -79,15 +80,7 @@ export default async function ExperienceDetailPage({
 								${experience.price}
 							</p>
 
-							<Link
-								href="/experiences"
-								className="flex h-11 items-center justify-center rounded-full border-2 border-[#121212] bg-[#121212] text-sm font-bold uppercase tracking-[0.12em] text-[#fff7e8] transition hover:bg-[#292826] gap-2"
-							>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-            </svg>
-								Back to Experiences
-							</Link>
+							<FavouriteButton experienceId={experience.id} />
 						</div>
 					</article>
 				</div>

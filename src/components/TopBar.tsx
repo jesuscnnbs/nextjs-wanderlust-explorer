@@ -10,6 +10,7 @@ type TopBarProps = {
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/experiences", label: "Experiences" },
+  { href: "/favourites", label: "Favourites" },
 ];
 
 export default function TopBar({ className = "" }: TopBarProps) {
