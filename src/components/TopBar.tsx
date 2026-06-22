@@ -11,6 +11,7 @@ const navItems = [
   { href: "/", label: "Home" },
   { href: "/experiences", label: "Experiences" },
   { href: "/favourites", label: "Favourites" },
+  { href: "/profile", label: "Profile" },
 ];
 
 export default function TopBar({ className = "" }: TopBarProps) {
