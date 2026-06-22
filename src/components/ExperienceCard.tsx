@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Experience } from "@/types/experience";
+import { useFavourites } from "@/context/FavouritesContext";
 
 type ExperienceCardProps = {
   experience: Experience;
@@ -19,13 +22,35 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
   const venueCount = 3 + (index % 4);
   const miles = 1 + (index % 3);
   const categoryColor = categoryColors[experience.category] ?? "bg-[#e0d6c8]";
+  const { isFavourite, addFavourite, removeFavourite } = useFavourites();
+  const liked = isFavourite(experience.id);
 
   return (
     <article
       className="relative rounded-xl overflow-hidden border-2 border-[#121212] bg-[#ecdfcf]"
     >
-      <div className="border-b-2  border-[#121212] bg-[#bdd8df] px-4 py-2">
-        <h2 className="pr-20 text-center text-xl font-semibold leading-tight">{experience.title}</h2>
+      <div className="relative border-b-2 border-[#121212] bg-[#bdd8df] px-4 py-2">
+        <button
+          onClick={() => (liked ? removeFavourite(experience.id) : addFavourite(experience.id))}
+          className="absolute left-2 top-1/2 -translate-y-1/2"
+          aria-label={liked ? "Remove from favourites" : "Add to favourites"}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill={liked ? "#f4acb7" : "none"}
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+            />
+          </svg>
+        </button>
+        <h2 className="text-center text-xl font-semibold leading-tight">{experience.title}</h2>
       </div>
 
       <div
